@@ -6,6 +6,8 @@ import useJobs from "@/hooks/useJobs";
 import ApplicantRow from "@/components/employer/ApplicantRow";
 import StatsCard from "@/components/seeker/StatsCard";
 import Card from "@/components/ui/Card";
+import useInitialLoading from "@/hooks/useInitialLoading";
+import { ListSkeleton, StatsSkeleton, TableSkeleton } from "@/components/ui/Skeletons";
 import { EMPLOYER_LABELS } from "@/utils/constants";
 
 export default function EmployerDashboard() {
@@ -13,6 +15,7 @@ export default function EmployerDashboard() {
   const { jobs, applications, updateApplicationStatus } = useJobs();
   const navigate = useNavigate();
   const [showAllJobs, setShowAllJobs] = useState(false);
+  const loading = useInitialLoading();
 
   const myJobs = useMemo(() => jobs.filter((j) => j.employerId === user.id), [jobs, user.id]);
   const myJobIds = useMemo(() => new Set(myJobs.map((j) => j.id)), [myJobs]);
@@ -39,18 +42,26 @@ export default function EmployerDashboard() {
         <p className="mt-1 text-slate-600">Aapki hiring ka haal.</p>
       </div>
 
-      <section className="grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Stats">
-        <StatsCard label="Open jobs" value={myJobs.filter((j) => j.status === "open").length} accent="bg-lagoon" />
-        <StatsCard label="Total applicants" value={applicants.length} accent="bg-slate-400" />
-        <StatsCard label="In interview" value={count("interview")} accent="bg-marigold" />
-        <StatsCard label="Hired" value={count("offer")} accent="bg-pine" />
-      </section>
+      {loading ? (
+        <StatsSkeleton />
+      ) : (
+        <section className="grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Stats">
+          <StatsCard label="Open jobs" value={myJobs.filter((j) => j.status === "open").length} accent="bg-lagoon" />
+          <StatsCard label="Total applicants" value={applicants.length} accent="bg-slate-400" />
+          <StatsCard label="In interview" value={count("interview")} accent="bg-marigold" />
+          <StatsCard label="Hired" value={count("offer")} accent="bg-pine" />
+        </section>
+      )}
 
       <Card className="!p-0">
         <div className="flex items-center justify-between px-4 py-4 sm:px-6">
           <h2 className="font-display text-lg font-semibold text-harbor">Recent applicants</h2>
         </div>
-        {recent.length === 0 ? (
+        {loading ? (
+          <div className="px-4 pb-6 sm:px-6">
+            <TableSkeleton rows={3} cols={4} bare />
+          </div>
+        ) : recent.length === 0 ? (
           <p className="px-4 pb-6 text-sm text-slate-500 sm:px-6">Abhi tak kisi ne apply nahi kiya.</p>
         ) : (
           <div className="overflow-x-auto">
@@ -87,7 +98,9 @@ export default function EmployerDashboard() {
             Nayi job post karo
           </Link>
         </div>
-        {myJobs.length === 0 ? (
+        {loading ? (
+          <ListSkeleton rows={3} bare className="mt-3" />
+        ) : myJobs.length === 0 ? (
           <p className="mt-3 text-sm text-slate-500">Abhi koi job post nahi ki.</p>
         ) : (
           <>

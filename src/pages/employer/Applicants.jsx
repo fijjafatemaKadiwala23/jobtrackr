@@ -7,6 +7,9 @@ import ApplicantRow from "@/components/employer/ApplicantRow";
 import CandidateDrawer from "@/components/employer/CandidateDrawer";
 import PipelineBoard from "@/components/employer/PipelineBoard";
 import EmptyState from "@/components/ui/EmptyState";
+import useInitialLoading from "@/hooks/useInitialLoading";
+import Skeleton from "@/components/ui/Skeleton";
+import { BoardSkeleton, TableSkeleton } from "@/components/ui/Skeletons";
 import { EMPLOYER_COLUMNS, EMPLOYER_LABELS, STATUS_DOT } from "@/utils/constants";
 
 const viewButton = (active) =>
@@ -19,6 +22,7 @@ export default function Applicants() {
 
   const [view, setView] = useState("board");
   const [selectedId, setSelectedId] = useState(null);
+  const loading = useInitialLoading();
 
   const job = jobs.find((j) => j.id === id && j.employerId === user.id);
   const applicants = useMemo(
@@ -63,7 +67,9 @@ export default function Applicants() {
         <div>
           <h1 className="font-display text-3xl font-bold text-harbor">{job.title}</h1>
           <p className="mt-1 text-slate-600">
-            {applicants.length} applicants, job {job.status === "open" ? "open hai" : "closed hai"}
+            {loading
+              ? "Applicants load ho rahe hain..."
+              : applicants.length + " applicants, job " + (job.status === "open" ? "open hai" : "closed hai")}
           </p>
         </div>
         <div className="inline-flex overflow-hidden rounded-md border border-slate-300" role="group" aria-label="View">
@@ -77,23 +83,29 @@ export default function Applicants() {
       </div>
 
       {/* Funnel: kis stage me kitne candidates */}
-      <div className="mt-6 space-y-2 rounded-lg border border-slate-200 bg-white p-4" aria-label="Hiring funnel">
-        {EMPLOYER_COLUMNS.map((status) => (
-          <div key={status} className="flex items-center gap-3 text-sm">
-            <span className="w-24 shrink-0 text-slate-600">{EMPLOYER_LABELS[status]}</span>
-            <div className="h-2 flex-1 rounded-full bg-slate-100">
-              <div
-                className={"h-2 rounded-full transition-all " + STATUS_DOT[status]}
-                style={{ width: (countOf(status) / maxCount) * 100 + "%" }}
-              />
+      {loading ? (
+        <Skeleton className="mt-6 h-36 w-full" />
+      ) : (
+        <div className="mt-6 space-y-2 rounded-lg border border-slate-200 bg-white p-4" aria-label="Hiring funnel">
+          {EMPLOYER_COLUMNS.map((status) => (
+            <div key={status} className="flex items-center gap-3 text-sm">
+              <span className="w-24 shrink-0 text-slate-600">{EMPLOYER_LABELS[status]}</span>
+              <div className="h-2 flex-1 rounded-full bg-slate-100">
+                <div
+                  className={"h-2 rounded-full transition-all " + STATUS_DOT[status]}
+                  style={{ width: (countOf(status) / maxCount) * 100 + "%" }}
+                />
+              </div>
+              <span className="w-6 text-right tabular-nums text-harbor">{countOf(status)}</span>
             </div>
-            <span className="w-6 text-right tabular-nums text-harbor">{countOf(status)}</span>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="mt-6">
-        {applicants.length === 0 ? (
+        {loading ? (
+          view === "board" ? <BoardSkeleton /> : <TableSkeleton cols={3} />
+        ) : applicants.length === 0 ? (
           <EmptyState title="Abhi tak kisi ne apply nahi kiya" description="Jab seekers apply karenge, wo yahan Applied column me dikhenge." />
         ) : view === "board" ? (
           <PipelineBoard applications={applicants} onOpen={setSelectedId} onStatusChange={handleStatus} />

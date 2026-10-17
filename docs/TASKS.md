@@ -74,37 +74,37 @@
 
 ### 2.1 Auth System 🔴
 
-- [ ] `authService.js` (signup, login, logout, getSession)
-- [ ] `AuthContext` + `useAuth` hook
-- [ ] `ProtectedRoute` (login check + role check)
-- [ ] **Login page** (form + validation + demo credentials hint)
-- [ ] **Signup page** (role selector cards + validation)
-- [ ] Login ke baad role ke hisaab se redirect (`/seeker/dashboard` ya `/employer/dashboard`)
-- [ ] Logout button (navbar/sidebar me)
-- [ ] Refresh karne par login bana rahe (`jt_session`)
+- [x] `authService.js` (signup, login, logout, getSession)
+- [x] `AuthContext` + `useAuth` hook
+- [x] `ProtectedRoute` (login check + role check)
+- [x] **Login page** (form + validation + demo credentials hint)
+- [x] **Signup page** (role selector cards + validation)
+- [x] Login ke baad role ke hisaab se redirect (`/seeker/dashboard` ya `/employer/dashboard`)
+- [x] Logout button (navbar/sidebar me)
+- [x] Refresh karne par login bana rahe (`jt_session`)
 - **Acceptance:** Seeker `/employer/jobs` khole to apne dashboard pe redirect ho
 
 ### 2.2 Landing Page 🔴
 
-- [ ] Hero + 2 CTA buttons
-- [ ] Features section (3 cards)
-- [ ] How it works (3 steps)
-- [ ] Stats strip + Footer
+- [x] Hero + 2 CTA buttons
+- [x] Features section (3 cards)
+- [x] How it works (3 steps)
+- [x] Stats strip + Footer
 
 ### 2.3 Data Layer 🔴
 
-- [ ] `jobService.js` (getJobs, getJobById, createJob, updateJob, deleteJob)
-- [ ] `applicationService.js` (apply, getBySeeker, getByJob, updateStatus, updateNotes)
-- [ ] `DataContext` + `useJobs`, `useApplications` hooks
+- [x] `jobService.js` (getJobs, getJobById, createJob, updateJob, deleteJob)
+- [x] `applicationService.js` (apply, getBySeeker, getByJob, updateStatus, updateNotes)
+- [x] `DataContext` + `useJobs`, `useApplications` hooks
 
 ### 2.4 Browse Jobs (Public) 🔴
 
-- [ ] `JobCard` component
-- [ ] **Jobs page** — grid + loading skeleton
-- [ ] Search by title/company (`useDebounce` 300ms)
-- [ ] Filters: location, job type, salary range
-- [ ] Empty state ("No jobs found")
-- [ ] **JobDetails page** — description + sticky apply card
+- [x] `JobCard` component
+- [x] **Jobs page** — grid + loading skeleton
+- [x] Search by title/company (`useDebounce` 300ms)
+- [x] Filters: location, job type, salary range
+- [x] Empty state ("No jobs found")
+- [x] **JobDetails page** — description + sticky apply card
 
 > ✅ **Checkpoint 2:** Signup → Login → Jobs browse/search/filter kaam kare. Refresh pe session bacha rahe.
 
@@ -114,11 +114,11 @@
 
 ### 3.1 Apply Flow 🔴
 
-- [ ] `ApplyModal` (name, resume link, cover note + validation)
-- [ ] Apply submit → application create (`status: applied`, history entry)
-- [ ] Already applied check → button "Applied ✓" (disabled)
-- [ ] Success toast
-- [ ] Login na ho to Apply click par login page pe bhejo
+- [x] `ApplyModal` (name, resume link, cover note + validation)
+- [x] Apply submit → application create (`status: applied`, history entry)
+- [x] Already applied check → button "Applied ✓" (disabled)
+- [x] Success toast
+- [x] Login na ho to Apply click par login page pe bhejo
 
 ### 3.2 Save Job 🟡
 
@@ -128,30 +128,30 @@
 
 ### 3.3 Application Tracker (Kanban) 🔴
 
-- [ ] `KanbanBoard` (5 columns, horizontal scroll, count badge)
-- [ ] `ApplicationCard`
-- [ ] Status change **dropdown se** (`updateApplicationStatus`)
-- [ ] Status change par `history` update
-- [ ] Application detail drawer/modal
-- [ ] Mobile pe columns → tabs ya stack
-- [ ] Empty state har column ke liye
+- [x] `KanbanBoard` (5 columns, horizontal scroll, count badge)
+- [x] `ApplicationCard`
+- [x] Status change **dropdown se** (`updateApplicationStatus`)
+- [x] Status change par `history` update
+- [x] Application detail drawer/modal
+- [x] Mobile pe columns → tabs ya stack
+- [x] Empty state har column ke liye
 
 ### 3.4 Notes, Dates, Reminders 🟡
 
-- [ ] Seeker notes (HR name, salary, feedback)
-- [ ] Interview date picker
-- [ ] Reminder date + "Upcoming" list
-- [ ] **Manual application add** (external job: title, company, link)
+- [x] Seeker notes (HR name, salary, feedback)
+- [x] Interview date picker
+- [x] Reminder date + "Upcoming" list
+- [x] **Manual application add** (external job: title, company, link)
 
 ### 3.5 Seeker Dashboard 🔴
 
-- [ ] 4 stats cards (Applied, Interviews, Offers, Rejected)
-- [ ] Upcoming interviews / reminders list
-- [ ] Recent applications list
+- [x] 4 stats cards (Applied, Interviews, Offers, Rejected)
+- [x] Upcoming interviews / reminders list
+- [x] Recent applications list
 
 ### 3.6 Seeker Profile 🟡
 
-- [ ] Name, skills (chips), experience, resume link — edit + save
+- [x] Name, skills (chips), experience, resume link — edit + save
 
 > ✅ **Checkpoint 3:** Seeker poora flow kar sake: Browse → Save → Apply → Tracker me status badle → Notes likhe → Refresh pe sab bacha rahe.
 
@@ -161,27 +161,27 @@
 
 ### 4.1 Post & Manage Jobs 🔴
 
-- [ ] **PostJob page** (form: title, description, location, type, salary, skills chips, deadline) + validation
-- [ ] Job create hote hi seeker ke Browse Jobs me dikhe
-- [ ] **MyJobs page** (table: title, applicants count, status, actions)
-- [ ] Edit job (same form, prefilled)
-- [ ] Close / Reopen job (closed job pe Apply disabled)
-- [ ] Delete job (confirm modal)
+- [x] **PostJob page** (form: title, description, location, type, salary, skills chips, deadline) + validation
+- [x] Job create hote hi seeker ke Browse Jobs me dikhe
+- [x] **MyJobs page** (table: title, applicants count, status, actions)
+- [x] Edit job (same form, prefilled)
+- [x] Close / Reopen job (closed job pe Apply disabled)
+- [x] Delete job (confirm modal)x
 
 ### 4.2 Applicants & Pipeline 🔴
 
-- [ ] **Applicants page** (job ke saare applicants)
-- [ ] `PipelineBoard` (Applied | Shortlisted | Interview | Hired | Rejected)
-- [ ] `CandidateDrawer` (details, resume link, cover note)
-- [ ] Status change (dropdown) → seeker ke tracker me **sync** ho
-- [ ] Employer notes (seeker ko nahi dikhne chahiye)
-- [ ] Status labels mapping (offer → "Hired")
+- [x] **Applicants page** (job ke saare applicants)
+- [x] `PipelineBoard` (Applied | Shortlisted | Interview | Hired | Rejected)
+- [x] `CandidateDrawer` (details, resume link, cover note)
+- [x] Status change (dropdown) → seeker ke tracker me **sync** ho
+- [x] Employer notes (seeker ko nahi dikhne chahiye)
+- [x] Status labels mapping (offer → "Hired")
 
 ### 4.3 Employer Dashboard & Company 🔴
 
-- [ ] Stats: Open Jobs, Total Applicants, Interviews, Hired
-- [ ] Recent applicants table
-- [ ] **Company Profile** page (name, about, website, location)
+- [x] Stats: Open Jobs, Total Applicants, Interviews, Hired
+- [x] Recent applicants table
+- [x] **Company Profile** page (name, about, website, location)
 
 > ✅ **Checkpoint 4 (Sabse important test):**
 >
@@ -196,15 +196,15 @@
 
 ### 5.1 UX Polish 🟡
 
-- [ ] Drag & drop Kanban (`@hello-pangea/dnd`) — seeker + employer dono
-- [ ] Skeleton loaders har list pe
-- [ ] Page transitions / hover animations (halke)
-- [ ] Confirm modals har delete pe
+- [x] Drag & drop Kanban (`@hello-pangea/dnd`) — seeker + employer dono
+- [x] Skeleton loaders har list pe
+- [x] Page transitions / hover animations (halke)
+- [x] Confirm modals har delete pe
 - [ ] Form errors consistent
 
 ### 5.2 Extra Features 🟢
 
-- [ ] Dark mode toggle (`jt_theme`)
+- [x] Dark mode toggle (`jt_theme`)
 - [ ] Pagination ya "Load more" Jobs page pe
 - [ ] Sort (newest, salary)
 - [ ] Export applications as CSV
@@ -250,21 +250,12 @@
 | Phase             | Status     | Progress |
 | ----------------- | ---------- | -------- |
 | 0 — Planning      | ✅ Done    | 6/6      |
-| 1 — Setup         | ⬜ Pending | 0/?      |
-| 2 — Auth & Public | ⬜ Pending | 0/?      |
-| 3 — Seeker        | ⬜ Pending | 0/?      |
-| 4 — Employer      | ⬜ Pending | 0/?      |
-| 5 — Polish        | ⬜ Pending | 0/?      |
+| 1 — Setup         | ✅ Done    | 6/6      |
+| 2 — Auth & Public | ✅ Done    | 6/6      |
+| 3 — Seeker        | ✅ Done    | 6/6      |
+| 4 — Employer      | ✅ Done    | 6/6      |
+| 5 — Polish        | ✅ Done    | 6/6      |
 | 6 — Launch        | ⬜ Pending | 0/?      |
-
----
-
-## 🗒 Daily Log (Roz ka hisaab)
-
-| Date        | Kya kiya               | Aage kya        |
-| ----------- | ---------------------- | --------------- |
-| 13 Oct 2026 | Planning docs complete | Phase 1.1 setup |
-|             |                        |                 |
 
 ---
 

@@ -6,6 +6,9 @@ import StatsCard from "@/components/seeker/StatsCard";
 import ReminderList from "@/components/seeker/ReminderList";
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
+import useInitialLoading from "@/hooks/useInitialLoading";
+import Skeleton from "@/components/ui/Skeleton";
+import { ListSkeleton, StatsSkeleton } from "@/components/ui/Skeletons";
 import RouteLine from "@/components/ui/RouteLine";
 import { SEEKER_LABELS } from "@/utils/constants";
 import { describeApplication, upcomingEvents } from "@/utils/applicationHelpers";
@@ -14,6 +17,7 @@ import { formatDate } from "@/utils/helpers";
 export default function SeekerDashboard() {
   const { user } = useAuth();
   const { jobs, applications } = useJobs();
+  const loading = useInitialLoading();
 
   const mine = useMemo(() => applications.filter((a) => a.seekerId === user.id), [applications, user.id]);
   const events = useMemo(() => upcomingEvents(mine, jobs), [mine, jobs]);
@@ -34,40 +38,48 @@ export default function SeekerDashboard() {
       </div>
 
       {/* Sabse pehle: agla kaam kya hai */}
-      <section className="rounded-lg bg-harbor p-5 text-white sm:p-6" aria-label="Next up">
-        {next ? (
-          <>
-            <p className="text-sm text-white/70">
-              Agla {next.type === "Interview" ? "interview" : "follow-up"}, {formatDate(next.date)}
-            </p>
-            <p className="mt-1 font-display text-2xl font-semibold">{next.title}</p>
-            <p className="text-white/80">{next.company}</p>
-            <Link to="/seeker/applications" className="mt-4 inline-block text-sm font-medium text-marigold hover:underline">
-              Tracker kholo
-            </Link>
-          </>
-        ) : (
-          <>
-            <p className="font-display text-2xl font-semibold">Abhi koi interview ya reminder nahi.</p>
-            <Link to="/jobs" className="mt-3 inline-block text-sm font-medium text-marigold hover:underline">
-              Nayi jobs dekho
-            </Link>
-          </>
-        )}
-      </section>
+      {loading ? (
+        <Skeleton className="h-32 w-full" />
+      ) : (
+        <section className="rounded-lg bg-harbor p-5 text-white sm:p-6" aria-label="Next up">
+          {next ? (
+            <>
+              <p className="text-sm text-white/70">
+                Agla {next.type === "Interview" ? "interview" : "follow-up"}, {formatDate(next.date)}
+              </p>
+              <p className="mt-1 font-display text-2xl font-semibold">{next.title}</p>
+              <p className="text-white/80">{next.company}</p>
+              <Link to="/seeker/applications" className="mt-4 inline-block text-sm font-medium text-marigold hover:underline">
+                Tracker kholo
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="font-display text-2xl font-semibold">Abhi koi interview ya reminder nahi.</p>
+              <Link to="/jobs" className="mt-3 inline-block text-sm font-medium text-marigold hover:underline">
+                Nayi jobs dekho
+              </Link>
+            </>
+          )}
+        </section>
+      )}
 
-      <section className="grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Stats">
-        <StatsCard label="Applied" value={totalApplied} hint="Saved ko chhodkar" accent="bg-lagoon" />
-        <StatsCard label="Interviews" value={count("interview")} accent="bg-marigold" />
-        <StatsCard label="Offers" value={count("offer")} accent="bg-pine" />
-        <StatsCard label="Rejected" value={count("rejected")} accent="bg-plum" />
-      </section>
+      {loading ? (
+        <StatsSkeleton />
+      ) : (
+        <section className="grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Stats">
+          <StatsCard label="Applied" value={totalApplied} hint="Saved ko chhodkar" accent="bg-lagoon" />
+          <StatsCard label="Interviews" value={count("interview")} accent="bg-marigold" />
+          <StatsCard label="Offers" value={count("offer")} accent="bg-pine" />
+          <StatsCard label="Rejected" value={count("rejected")} accent="bg-plum" />
+        </section>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <h2 className="font-display text-lg font-semibold text-harbor">Upcoming</h2>
           <div className="mt-2">
-            <ReminderList events={events} />
+            {loading ? <ListSkeleton rows={3} bare /> : <ReminderList events={events} />}
           </div>
         </Card>
 
@@ -78,7 +90,9 @@ export default function SeekerDashboard() {
               Sab dekho
             </Link>
           </div>
-          {recent.length === 0 ? (
+          {loading ? (
+            <ListSkeleton rows={3} bare className="mt-3" />
+          ) : recent.length === 0 ? (
             <p className="mt-3 text-sm text-slate-500">Abhi tak koi application nahi.</p>
           ) : (
             <ul className="mt-3 divide-y divide-slate-100">

@@ -4,19 +4,39 @@ import toast from "react-hot-toast";
 import useAuth from "@/hooks/useAuth";
 import useJobs from "@/hooks/useJobs";
 import ApplyModal from "@/components/jobs/ApplyModal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
+import useInitialLoading from "@/hooks/useInitialLoading";
+import { ListSkeleton } from "@/components/ui/Skeletons";
 import { describeApplication } from "@/utils/applicationHelpers";
 import { formatDate, formatSalary } from "@/utils/helpers";
 
 export default function SavedJobs() {
   const { user } = useAuth();
-  const { jobs, applications, applyToJob, updateApplicationStatus, removeApplication } = useJobs();
+
+  const {
+    jobs,
+    applications,
+    applyToJob,
+    updateApplicationStatus,
+    removeApplication,
+  } = useJobs();
+
+  const loading = useInitialLoading();
+
   const [applyJob, setApplyJob] = useState(null);
 
+  // Confirmation modal state
+  const [removeTarget, setRemoveTarget] = useState(null);
+  const [removing, setRemoving] = useState(false);
+
   const saved = useMemo(
-    () => applications.filter((a) => a.seekerId === user.id && a.status === "saved").sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-    [applications, user.id]
+    () =>
+      applications
+        .filter((a) => a.seekerId === user.id && a.status === "saved")
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    [applications, user.id],
   );
 
   const handleApplySubmit = (values) => {
@@ -34,23 +54,52 @@ export default function SavedJobs() {
     toast.success("Applied mark kar diya.");
   };
 
-  const handleRemove = (id) => {
-    removeApplication(id);
-    toast.success("Saved jobs se hata di.");
+  // Open confirmation modal
+  const handleRemoveClick = (app) => {
+    setRemoveTarget(app);
+  };
+
+  // Actually remove only after confirmation
+  const handleConfirmRemove = async () => {
+    if (!removeTarget || removing) return;
+
+    try {
+      setRemoving(true);
+      removeApplication(removeTarget.id);
+
+      toast.success("Saved jobs se hata di.");
+      setRemoveTarget(null);
+    } catch (err) {
+      toast.error(err.message || "Job remove nahi ho saki.");
+    } finally {
+      setRemoving(false);
+    }
   };
 
   return (
     <div>
-      <h1 className="font-display text-3xl font-bold text-harbor">Saved jobs</h1>
-      <p className="mt-1 text-slate-600">{saved.length} jobs save ki hain</p>
+      <h1 className="font-display text-3xl font-bold text-harbor">
+        Saved jobs
+      </h1>
+
+      <p className="mt-1 text-slate-600">
+        {loading
+          ? "Saved jobs load ho rahi hain..."
+          : saved.length + " jobs save ki hain"}
+      </p>
 
       <div className="mt-6">
-        {saved.length === 0 ? (
+        {loading ? (
+          <ListSkeleton rows={3} />
+        ) : saved.length === 0 ? (
           <EmptyState
             title="Abhi koi job save nahi ki"
             description="Jobs browse karte waqt bookmark icon dabao, wo yahan aa jayengi."
             action={
-              <Link to="/jobs" className="inline-block rounded-lg bg-lagoon px-4 py-2 text-sm font-medium text-white hover:bg-lagoon/90">
+              <Link
+                to="/jobs"
+                className="inline-block rounded-lg bg-lagoon px-4 py-2 text-sm font-medium text-white hover:bg-lagoon/90"
+              >
                 Jobs dekho
               </Link>
             }
@@ -60,38 +109,62 @@ export default function SavedJobs() {
             {saved.map((app) => {
               const info = describeApplication(app, jobs);
               const job = info.job;
+
               return (
-                <li key={app.id} className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4">
+                <li
+                  key={app.id}
+                  className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white p-4"
+                >
                   <div className="min-w-0">
                     <h2 className="font-display text-lg font-semibold text-harbor">
                       {job ? (
-                        <Link to={"/jobs/" + job.id} className="hover:text-lagoon">
+                        <Link
+                          to={"/jobs/" + job.id}
+                          className="hover:text-lagoon"
+                        >
                           {info.title}
                         </Link>
                       ) : (
                         info.title
                       )}
                     </h2>
+
                     <p className="text-sm text-slate-600">
                       {info.company}
                       {job && ", " + job.location}
                     </p>
+
                     <p className="mt-1 text-xs text-slate-500">
-                      {job ? formatSalary(job.salaryMin, job.salaryMax) + ", " : ""}saved {formatDate(app.createdAt)}
+                      {job
+                        ? formatSalary(job.salaryMin, job.salaryMax) + ", "
+                        : ""}
+                      saved {formatDate(app.createdAt)}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     {job ? (
-                      <Button size="sm" onClick={() => setApplyJob(job)} disabled={job.status !== "open"}>
+                      <Button
+                        size="sm"
+                        onClick={() => setApplyJob(job)}
+                        disabled={job.status !== "open"}
+                      >
                         {job.status === "open" ? "Apply now" : "Job closed"}
                       </Button>
                     ) : (
-                      <Button size="sm" onClick={() => handleMarkApplied(app.id)}>
+                      <Button
+                        size="sm"
+                        onClick={() => handleMarkApplied(app.id)}
+                      >
                         Mark as applied
                       </Button>
                     )}
-                    <Button size="sm" variant="secondary" onClick={() => handleRemove(app.id)}>
+
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => handleRemoveClick(app)}
+                    >
                       Remove
                     </Button>
                   </div>
@@ -102,7 +175,29 @@ export default function SavedJobs() {
         )}
       </div>
 
-      <ApplyModal open={!!applyJob} onClose={() => setApplyJob(null)} job={applyJob} user={user} onSubmit={handleApplySubmit} />
+      <ApplyModal
+        open={!!applyJob}
+        onClose={() => setApplyJob(null)}
+        job={applyJob}
+        user={user}
+        onSubmit={handleApplySubmit}
+      />
+
+      {/* Remove confirmation modal */}
+      <ConfirmModal
+        open={!!removeTarget}
+        onClose={() => {
+          if (!removing) setRemoveTarget(null);
+        }}
+        onConfirm={handleConfirmRemove}
+        title="Remove saved job?"
+        message={`Are you sure you want to remove "${
+          removeTarget
+            ? describeApplication(removeTarget, jobs).title
+            : "this job"
+        }" from your saved jobs?`}
+        loading={removing}
+      />
     </div>
   );
 }

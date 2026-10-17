@@ -5,6 +5,8 @@ import useAuth from "@/hooks/useAuth";
 import useJobs from "@/hooks/useJobs";
 import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
+import useInitialLoading from "@/hooks/useInitialLoading";
+import { TableSkeleton } from "@/components/ui/Skeletons";
 import Modal from "@/components/ui/Modal";
 import { formatDate } from "@/utils/helpers";
 
@@ -13,6 +15,7 @@ const actionLink = "text-sm text-lagoon hover:underline";
 export default function MyJobs() {
   const { user } = useAuth();
   const { jobs, applications, editJob, removeJob } = useJobs();
+  const loading = useInitialLoading();
   const [toDelete, setToDelete] = useState(null);
 
   const myJobs = useMemo(
@@ -38,7 +41,7 @@ export default function MyJobs() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-3xl font-bold text-harbor">My jobs</h1>
-          <p className="mt-1 text-slate-600">{myJobs.length} jobs</p>
+          <p className="mt-1 text-slate-600">{loading ? "Jobs load ho rahi hain..." : myJobs.length + " jobs"}</p>
         </div>
         <Link to="/employer/jobs/new" className="rounded-lg bg-lagoon px-4 py-2 font-medium text-white transition hover:bg-lagoon/90">
           Post a job
@@ -46,7 +49,9 @@ export default function MyJobs() {
       </div>
 
       <div className="mt-6">
-        {myJobs.length === 0 ? (
+        {loading ? (
+          <TableSkeleton cols={4} />
+        ) : myJobs.length === 0 ? (
           <EmptyState title="Abhi koi job post nahi ki" description="Pehli job post karo, candidates yahin se manage honge." />
         ) : (
           <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">

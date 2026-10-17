@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   @apply bg-mist font-sans text-harbor/80;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 transition-colors
+           dark:bg-slate-950 dark:text-slate-100;
+  }
+}
+
+@layer base {
+  h1 {
+    @apply text-slate-900 dark:text-slate-100;
+  }
 }
