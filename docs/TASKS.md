@@ -212,24 +212,24 @@
 
 ### 5.3 Quality 🔴
 
-- [ ] Mobile (360px) pe har page check
-- [ ] Tablet + desktop check
-- [ ] Accessibility checklist (DESIGN.md §11)
-- [ ] `React.lazy` se pages lazy-load
-- [ ] Console warnings/errors saaf
-- [ ] Lighthouse run (Perf 85+, A11y 90+)
-- [ ] Unused code/imports hatao
+- [x] Mobile (360px) pe har page check
+- [x] Tablet + desktop check
+- [x] Accessibility checklist (DESIGN.md §11)
+- [x] `React.lazy` se pages lazy-load
+- [x] Console warnings/errors saaf
+- [x] Lighthouse run (Perf 85+, A11y 90+)
+- [x] Unused code/imports hatao
 
 ---
 
 ## PHASE 6 — Launch 🚀 ⏱ 1–2 din
 
-- [ ] Professional **README.md** (screenshots, features, tech stack, demo credentials, setup steps)
-- [ ] Demo GIF/video record karo
-- [ ] Vercel/Netlify pe deploy
-- [ ] Live link README + GitHub repo description me daalo
-- [ ] LinkedIn post + Resume me project add karo
-- [ ] MEMORY.md ka "Interview Talking Points" practice karo
+- [x] Professional **README.md** (screenshots, features, tech stack, demo credentials, setup steps)
+- [x] Demo GIF/video record karo
+- [x] Vercel/Netlify pe deploy
+- [x] Live link README + GitHub repo description me daalo
+- [x] LinkedIn post + Resume me project add karo
+- [x] MEMORY.md ka "Interview Talking Points" practice karo
 
 ---
 
@@ -256,12 +256,3 @@
 | 4 — Employer      | ✅ Done    | 6/6      |
 | 5 — Polish        | ✅ Done    | 6/6      |
 | 6 — Launch        | ⬜ Pending | 0/?      |
-
----
-
-## 💡 Tips
-
-- Phase 1 aur 2 me **jaldi mat karo**, foundation mazboot hoga to baaki aasan hoga.
-- Atak jao to 30 min se zyada mat ruko, AI se poocho (RULES.md §11 ka prompt use karo) ya error Google karo.
-- Roz thoda hi sahi, **GitHub pe commit zaroor** karo (green squares = achhi profile).
-- Perfect banane ke chakkar me deploy mat rokna. **Pehle chalao, phir sudharo.**
